@@ -22,9 +22,14 @@ export class AuthService {
                 data: {
                     email: dto.email,
                     hash,
-                    fullName: dto.fullName
+                    fullName: dto.fullName,
+                    prfilePicUrl: dto.profilePicUrl
                 }
+
             })
+            delete user.hash;
+            return this.signToken(user.id, user.email);
+
         } catch(error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code == 'P2002') {
@@ -52,7 +57,7 @@ export class AuthService {
             throw new ForbiddenException('Credentials are incorrect');
         }
 
-        return this.signToken(user.id, user.email);
+        return this.signToken(user.id,user.email);
     }
 
     async signToken (

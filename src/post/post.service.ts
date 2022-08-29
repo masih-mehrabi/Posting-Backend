@@ -19,8 +19,11 @@ export class PostService {
   getAllPosts() {
     return this.prisma.post.findMany({
       select: {
+        id: true,
+        userId:true,
         title: true,
         body: true,
+        _count: {select:{likes: true}},
         comments: {
           orderBy: {
             createdAt: 'desc',
@@ -34,7 +37,7 @@ export class PostService {
               select: {
                 id: true,
                 fullName: true,
-                _count: { select: { postLikes: true } },
+                _count: { select: { commentLike: true } },
               },
             },
           },
@@ -59,6 +62,7 @@ export class PostService {
             message: true,
             parentId: true,
             createdAt: true,
+            userId: true,
             user: {
               select: {
                 id: true,
@@ -72,7 +76,7 @@ export class PostService {
     });
   }
 
-  getPostById(userId: number, postId: number) {
+  getPostById(userId: number, postId: string) {
     return this.prisma.post.findFirst({
       where: {
         userId,
@@ -103,7 +107,7 @@ export class PostService {
     });
   }
 
-  async editPostById(userId: number, dto: EditPostDto, postId: number) {
+  async editPostById(userId: number, dto: EditPostDto, postId: string) {
     const post = await this.prisma.post.findUnique({
       where: {
         id: postId,
@@ -123,7 +127,7 @@ export class PostService {
     });
   }
 
-  async deletepostById(userId: number, postId: number) {
+  async deletepostById(userId: number, postId: string) {
     const post = await this.prisma.post.findUnique({
       where: {
         id: postId,

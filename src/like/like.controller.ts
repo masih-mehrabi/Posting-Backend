@@ -1,28 +1,35 @@
-import { Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { JwtGuard } from 'src/auth/guard';
+import { LikeDto } from './dto/like.dto';
 import { LikeService } from './like.service';
 
+
+@UseGuards(JwtGuard)
 @Controller('like')
 export class LikeController {
   constructor(private likeService: LikeService) {}
 
-  @Post('post')
-  likePost(
+  @Post('post/:postId')
+  async likePost(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) postId: number,
+    @Param('postId') postId: string
+
   ) {
     const data = {
       userId,
-      postId,
-    };
+      postId
+    }
+    
 
     return this.likeService.likePost(data);
+    
   }
 
-  @Post('comment')
+  @Post('comment/:commentId')
   likeComment(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) commentId: number,
+    @Param('commentId') commentId: string,
   ) {
     const data = {
       userId,
@@ -31,4 +38,9 @@ export class LikeController {
 
     return this.likeService.likeComment(data);
   }
+
+
 }
+
+
+

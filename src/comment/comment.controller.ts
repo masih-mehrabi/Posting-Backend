@@ -2,10 +2,13 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
@@ -17,29 +20,33 @@ import { CreateCommentDto, EditCommentDto } from './dto';
 @Controller('comment')
 export class CommentController {
   constructor(private commentService: CommentService) {}
-  @Post()
+
+  @Post('create')
   async createComment(
     @GetUser('id') userId: number,
     @Body() dto: CreateCommentDto,
-    @Param('postId', ParseIntPipe) postId: number,
   ) {
-    return this.commentService.createComment(dto, postId, userId);
+    return this.commentService.createComment(dto, userId);
   }
   @Patch(':id')
   async editComment(
     @GetUser('id') userId: number,
     @Body() dto: EditCommentDto,
-    @Param('postId', ParseIntPipe) postId: number,
-    @Param('id', ParseIntPipe) commentId: number,
+    @Param('id') commentId: string,
   ) {
-    return this.commentService.editComment(dto, userId, postId, commentId);
+    return this.commentService.editComment(dto, userId, commentId);
   }
 
+
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async deleteComment(
+  deleteCommentById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) commentId: number,
+    @Param('id') commentId: string,
   ) {
     return this.commentService.deleteCommentById(userId, commentId);
   }
+
+  // @Post('getuserId')
+
 }

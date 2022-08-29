@@ -11,49 +11,49 @@ datasource db {
 }
 
 model Post {
-  id       Int       @id @default(autoincrement())
+  id       String        @id @default(uuid())
   title    String
   body     String
   userId   Int
-  user     User      @relation(fields: [userId], references: [id])
+  user     User       @relation(fields: [userId], references: [id])
   comments Comment[]
-  likes PostLike[]
+  likes    PostLike[]
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  fullName  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  email     String    @unique
-  hash      String
-  post      Post[]
-  comments  Comment[]
-  postLikes     PostLike[]
-  commentLike CommentLike[]
+  id           Int           @id @default(autoincrement())
+  fullName     String ?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  email        String        @unique
+  hash         String
+  prfilePicUrl  String ?
+  post         Post[]
+  comments     Comment[]
+  postLikes    PostLike[]
+  commentLike  CommentLike[]
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        String           @id @default(uuid())
   message   String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    Int
-  parent    Comment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
-  parentId  Int?
-  children  Comment[] @relation("ParentChild")
+  post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  parent    Comment?      @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId  String?
+  children  Comment[]     @relation("ParentChild")
   likes     CommentLike[]
 }
 
 model PostLike {
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId    Int
-  postId Int
-
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId String
   @@id([userId, postId])
 }
 
@@ -61,6 +61,8 @@ model CommentLike {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   userId    Int
-  commentId Int
+  commentId String
   @@id([userId, commentId])
+
+
 }

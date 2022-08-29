@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { userInfo } from 'os';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { LikeDto } from './dto/like.dto';
 
 @Injectable()
 export class LikeService {
@@ -9,19 +11,30 @@ export class LikeService {
     ){}
 
     async likePost(
+    //     userId: number,
+    //    postId: string
         data: {
-        userId: number,
-        postId: number,
-        }
+        userId
+        postId
+      }
         
     ){
+      
+        // const Post = this.prisma.post.findUnique({
+        //     where:{
+        //         id: postId
+        //     }
+    
+        // })
         const like = await this.prisma.postLike.findUnique({
             where: {
              userId_postId: data
             }
     })
     if(!like){
-        return await this.prisma.postLike.create({data}).then(() => {
+        return await this.prisma.postLike.create({
+            data
+        }).then(() => {
             return {addPostLike: true}
         })
     } else {
@@ -39,7 +52,7 @@ export class LikeService {
 async likeComment(
     data: {
     userId: number,
-    commentId: number,
+    commentId: string,
     }
 
 ){

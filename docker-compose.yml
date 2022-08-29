@@ -1,0 +1,14 @@
+version: '4.0'
+services:
+  posting-db:
+    image: postgres:13
+    ports: 
+    - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: posting
+    # netwroks: 
+    # - M-develpment
+networks: 
+  M-develpment:

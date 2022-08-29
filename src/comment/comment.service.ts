@@ -6,24 +6,19 @@ import { CreateCommentDto, EditCommentDto } from './dto';
 export class CommentService {
   constructor(private prisma: PrismaService) {}
 
-  async createComment(dto: CreateCommentDto, userId: number, postId: number) {
+  async createComment(dto: CreateCommentDto, userId: number) {
     const comment = await this.prisma.comment.create({
       data: {
-        ...dto,
+        message: dto.message,
+        postId: dto.postId,
         userId,
-        postId,
       },
     });
     return comment;
   }
 
-  async editComment(
-    dto: EditCommentDto,
-    userId: number,
-    postId: number,
-    commentId: number,
-  ) {
-    const comment = await this.prisma.comment.findUnique({
+  async editComment(dto: EditCommentDto, userId: number, commentId: string) {
+    const comment = await this.prisma.comment.findFirst({
       where: {
         id: commentId,
       },
@@ -39,13 +34,12 @@ export class CommentService {
       },
       data: {
         ...dto,
-        postId: postId,
       },
     });
   }
 
-  async deleteCommentById(userId: number, commentId: number) {
-    const comment = await this.prisma.post.findUnique({
+  async deleteCommentById(userId: number, commentId: string) {
+    const comment = await this.prisma.comment.findFirst({
       where: {
         id: commentId,
       },
@@ -53,6 +47,7 @@ export class CommentService {
 
     if (!comment || comment.userId !== userId)
       throw new ForbiddenException('Access to this resource is denied');
+
     await this.prisma.comment.delete({
       where: {
         id: commentId,

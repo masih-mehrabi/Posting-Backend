@@ -38,15 +38,15 @@ export class PostController {
   @Get(':id')
   getPostById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) bookmarkId: number,
+    @Param('id') postId: string,
   ) {
-    return this.postService.getPostById(userId, bookmarkId);
+    return this.postService.getPostById(userId, postId);
   }
 
   @Patch(':id')
   editBookmarkById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) postId: number,
+    @Param('id') postId: string,
     @Body() dto: EditPostDto,
   ) {
     return this.postService.editPostById(userId, dto, postId);
@@ -55,8 +55,14 @@ export class PostController {
   @Delete(':id')
   deletePostById(
     @GetUser('id') userId: number,
-    @Param('id', ParseIntPipe) postId: number,
+    @Param('id') postId: string,
   ) {
     return this.postService.deletepostById(userId, postId);
+  }
+  @Post('get-user-id')
+  async returnUserId(
+    @GetUser('id') userId : number
+  ) {
+    return userId
   }
 }
