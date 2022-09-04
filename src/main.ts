@@ -10,8 +10,8 @@ async function bootstrap() {
   }));
   app.enableCors({
     origin: '*',
-    methods: 'GET, POST, PATCH, DELETE'
+    methods: 'GET, POST, PATCH, DELETE',
   })
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(3001);
 }
 bootstrap();

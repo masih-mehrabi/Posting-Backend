@@ -22,16 +22,20 @@ model Post {
 
 model User {
   id           Int           @id @default(autoincrement())
-  fullName     String ?
+  firstName     String
+  lastName  String 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   email        String        @unique
   hash         String
   prfilePicUrl  String ?
-  post         Post[]
+  posts         Post[]
   comments     Comment[]
   postLikes    PostLike[]
-  commentLike  CommentLike[]
+  commentLikes  CommentLike[]
+  // creator Conversation? @relation("creator")
+  // recepient Conversation? @relation("recepient")
+  // messages Message[]
 }
 
 model Comment {
@@ -63,6 +67,35 @@ model CommentLike {
   userId    Int
   commentId String
   @@id([userId, commentId])
-
-
 }
+
+// model Session {
+//   id String @id @default(uuid())
+//   expiredAt DateTime @default(now())
+//   json String
+//   destroyedAt DateTime 
+// }
+
+// model Conversation {
+//   creator User @relation("creator",fields: [creatorId], references: [id])
+//   creatorId Int @unique
+//   recepient User @relation("recepient",fields: [recepientId], references: [id])
+//   recepientId Int  @unique
+//   messages Message[] 
+
+//   createdAt DateTime @default(now())
+//    @@id([creatorId, recepientId])   
+   
+// }
+
+// model Message  {
+//   conversation Conversation @relation(fields: [senderId, receiverId], references: [creatorId,recepientId], onDelete: Cascade, onUpdate: Cascade)
+//   senderId Int 
+//   receiverId Int
+//   @@id([senderId, receiverId])
+//   content String
+//   createdAt DateTime @default(now())
+//   author User @relation(fields: [userId], references: [id])
+//   userId Int
+// }
+

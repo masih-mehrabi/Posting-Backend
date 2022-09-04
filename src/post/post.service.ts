@@ -24,6 +24,14 @@ export class PostService {
         title: true,
         body: true,
         _count: {select:{likes: true}},
+        user: {
+          select: {
+            id: true,
+            firstName:true,
+            lastName: true,
+            _count: {select:{postLikes:true}}
+          }
+        },
         comments: {
           orderBy: {
             createdAt: 'desc',
@@ -36,8 +44,9 @@ export class PostService {
             user: {
               select: {
                 id: true,
-                fullName: true,
-                _count: { select: { commentLike: true } },
+                firstName: true,
+                lastName: true,
+                _count: { select: { commentLikes: true } },
               },
             },
           },
@@ -53,6 +62,15 @@ export class PostService {
       select: {
         title: true,
         body: true,
+        _count: {select: {likes:true}},
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            _count: {select:{postLikes:true}}
+          }
+        },
         comments: {
           orderBy: {
             createdAt: 'desc',
@@ -63,11 +81,13 @@ export class PostService {
             parentId: true,
             createdAt: true,
             userId: true,
+            _count: {select:{likes:true}},
             user: {
               select: {
                 id: true,
-                fullName: true,
-                _count: { select: { postLikes: true } },
+                firstName: true,
+                lastName: true,
+                _count: { select: { commentLikes: true } },
               },
             },
           },
@@ -85,6 +105,15 @@ export class PostService {
       select: {
         title: true,
         body: true,
+        _count: {select:{likes:true}},
+        user: {
+          select:{
+            id: true,
+            firstName: true,
+            lastName: true,
+            _count: {select:{postLikes:true}}
+          }
+        },
         comments: {
           orderBy: {
             createdAt: 'desc',
@@ -94,11 +123,14 @@ export class PostService {
             message: true,
             parentId: true,
             createdAt: true,
+            userId: true,
+            _count: {select:{likes:true}},
             user: {
               select: {
                 id: true,
-                fullName: true,
-                _count: { select: { postLikes: true } },
+                firstName: true,
+                lastName:true,
+                _count: { select: { commentLikes: true } },
               },
             },
           },

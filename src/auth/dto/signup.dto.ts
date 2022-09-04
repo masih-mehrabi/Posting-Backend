@@ -11,7 +11,11 @@ export class SignupDto {
     
     @IsString()
     @IsNotEmpty()
-    fullName: string
+    firstName: string
+
+    @IsString()
+    @IsNotEmpty()
+    lastName: string
 
     @IsString()
     @IsOptional()
